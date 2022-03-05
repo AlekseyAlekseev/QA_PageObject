@@ -1,10 +1,12 @@
 package ru.netology.page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import lombok.val;
+import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -12,7 +14,8 @@ public class DashboardPage {
 
     private SelenideElement heading = $("[data-test-id=dashboard]");
 
-    private ElementsCollection cards = $$(".list__item");
+
+
     private ElementsCollection refillButton = $$("[data-test-id=action-deposit]");
 
     private final String balanceStart = "баланс: ";
@@ -26,12 +29,16 @@ public class DashboardPage {
         refillButton.first().click();
         return new TransferPage();
     }
+//val text = cards.get(id).text();
 
+    private ElementsCollection cards = $$(".list__item");
 
-    public int getFirstBalance() {
-        val text = cards.first().text();
+    public int getCardBalance(String id) {
+        val text = cards.find(attribute("data-test-id", id)).getText();
         return extractBalance(text);
     }
+
+
 
     private int extractBalance(String text) {
         val start = text.indexOf(balanceStart);
